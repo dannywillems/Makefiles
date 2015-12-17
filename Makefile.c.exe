@@ -1,0 +1,53 @@
+################################################################################
+############################## Variables to change #############################
+NAME	=
+
+##### By default, all files in SRC_DIR are source files
+SRC_DIR =
+
+##### Source files will be compiled into this repository
+OBJ_DIR =
+
+##### Header includes
+INC		=
+################################################################################
+
+################################################################################
+################################### Variables ##################################
+##### Compilator
+CC		= gcc
+
+##### Flags
+FLAGS	=	-Wall -Wextra -Werror
+
+##### Set this variable to -fPIC if you want to debug
+fPIC	=
+
+SRC 	=	$(wildcard $(SRC_DIR)/*.c)
+OBJ		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+################################################################################
+
+################################################################################
+################################# Rules ########################################
+all: $(NAME)
+
+$(NAME): exe
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) -I$(INC) $(FLAGS) -c $< -o $@
+
+exe: check_dir $(OBJ)
+	$(CC) $(FLAGS) $(OBJ) -o $(NAME)
+
+check_dir:
+	if [ ! -d $(OBJ_DIR) ]; then mkdir $(OBJ_DIR); fi;
+
+##### Clean rules
+clean:
+	rm -rf $(OBJ_DIR)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+################################################################################
