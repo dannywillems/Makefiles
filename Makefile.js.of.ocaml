@@ -1,0 +1,42 @@
+################################################################################
+########################### Variables to change ################################
+ML_DIR				=	ml
+ML_FILES 			=	$(ML_DIR)/test.ml \
+						$(ML_DIR)/test2.ml
+
+JS_OUTPUT_DIR		=	js
+JS_OUTPUT_FILE		=	test.js
+################################################################################
+
+################################################################################
+############################### Variables ######################################
+##### You don't need to change it.
+TMP_OUT_BYTECODE	=	out.byte
+CC_BYTECODE			=	ocamlfind ocamlc -package js_of_ocaml -package \
+					 	js_of_ocaml.syntax -syntax camlp4o -linkpkg \
+					 	-o $(TMP_OUT_BYTECODE)
+CC_JS				=	js_of_ocaml -o $(JS_OUTPUT_DIR)/$(JS_OUTPUT_FILE)
+CMO_FILES			=	$(patsubst $(ML_DIR)/%.ml, $(ML_DIR)/%.cmo, $(ML_FILES))
+CMI_FILES			=	$(patsubst $(ML_DIR)/%.ml, $(ML_DIR)/%.cmi, $(ML_FILES))
+################################################################################
+
+################################################################################
+################################## Rules #######################################
+all: check_dir js_of_ocaml
+
+check_dir:
+	if [ ! -d $(JS_OUTPUT_DIR) ]; then mkdir $(JS_OUTPUT_DIR); fi;
+
+js_of_ocaml:
+	$(CC_BYTECODE) $(ML_FILES)
+	$(CC_JS) $(TMP_OUT_BYTECODE)
+
+clean:
+	$(RM) -f $(TMP_OUT_BYTECODE) $(CMO_FILES) $(CMI_FILES)
+
+fclean: clean
+	# Don't remove the entire JS_OUTPUT_DIR.
+	$(RM) -f $(JS_OUTPUT_DIR)/$(JS_OUTPUT_FILE)
+
+re: fclean all
+################################################################################
