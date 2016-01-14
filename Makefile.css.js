@@ -28,6 +28,7 @@ JS_FILES			=
 
 ################################################################################
 ############################## Variables #######################################
+##### You don't need to change it.
 JS_EXEC				= java -jar $(YUICOMPRESSOR_LOC)
 JS_MINIFIED_FILES	= $(JS_FILES:.js=.min.js)
 
