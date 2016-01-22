@@ -47,11 +47,11 @@ js_of_ocaml:
 	$(CC_JS) $(TMP_OUT_BYTECODE)
 
 clean:
-	$(RM) -f $(TMP_OUT_BYTECODE) $(CMO_FILES) $(CMI_FILES)
+	$(RM) $(TMP_OUT_BYTECODE) $(CMO_FILES) $(CMI_FILES)
 
 fclean: clean
 	# Don't remove the entire JS_OUTPUT_DIR.
-	$(RM) -f $(JS_OUTPUT_DIR)/$(JS_OUTPUT_FILE)
+	$(RM) $(JS_OUTPUT_DIR)/$(JS_OUTPUT_FILE)
 
 re: fclean all
 ################################################################################
