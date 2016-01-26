@@ -2,17 +2,17 @@
 ############################# Variables to change ##############################
 ##### Set DEBUG to True if you don't want to minify css files (just compile).
 ##### Set to false if you're in dev.
-DEBUG				= True
+DEBUG							= True
 
 ##### If you're using less, fill with less files
-LESS_DIR			= less
-LESS_FILES			=
+LESS_DIR					= less
+LESS_FILES				=
 
 ##### TODO: sass option
 
 ##### Output directories for css files
-CSS_DIR				= css
-CSS_FILES			= $(patsubst $(LESS_DIR)/%.less, $(CSS_DIR)/%.css, $(LESS_FILES))
+CSS_DIR						= css
+CSS_FILES					= $(patsubst $(LESS_DIR)/%.less, $(CSS_DIR)/%.css, $(LESS_FILES))
 
 ##### If you're on prod, you can minify into only one file. Put a name
 CSS_MINIFY_OUTPUT	=
@@ -21,15 +21,15 @@ CSS_MINIFY_OUTPUT	=
 YUICOMPRESSOR_LOC	= yuicompressor-2.4.8.jar
 
 ##### JS location
-JS_DIR				= js
-JS_FILES			=
+JS_DIR						= js
+JS_FILES					=
 
 ################################################################################
 
 ################################################################################
 ############################## Variables #######################################
 ##### You don't need to change it.
-JS_EXEC				= java -jar $(YUICOMPRESSOR_LOC)
+JS_EXEC						= java -jar $(YUICOMPRESSOR_LOC)
 JS_MINIFIED_FILES	= $(JS_FILES:.js=.min.js)
 
 ifeq ($(DEBUG),True)
@@ -61,15 +61,18 @@ endif
 
 ##### clean
 clean_js:
-	rm -f $(JS_MINIFIED_FILES)
+	$(RM) $(JS_MINIFIED_FILES)
 
 clean_css_minify:
-	rm -f $(CSS_MINIFY_OUTPUT)
+ifeq ($(DEBUG),False)
+	mkdir -p $(CSS_DIR)
+	$(RM) $(CSS_MINIFY_OUTPUT)
 	touch $(CSS_MINIFY_OUTPUT)
+endif
 
 clean_css:
-	rm -f $(CSS_FILES)
-	rm -f $(CSS_MINIFY_OUTPUT)
+	$(RM) $(CSS_FILES)
+	$(RM) $(CSS_MINIFY_OUTPUT)
 
 ##### re
 re_css: clean_css css
