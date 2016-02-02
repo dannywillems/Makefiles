@@ -1,0 +1,140 @@
+################################################################################
+############################## Variables to change #############################
+##### Set DEBUG to True if you don't want to minify css files (just compile).
+##### Set to false if you're in dev.
+DEBUG						= True
+DEV_DIRECTORY				= app
+PROD_DIRECTORY				= www
+
+##### LESS, SASS, CSS CONFIGURATION
+##### If you're using less, fill with less files
+LESS_DIR					= $(DEV_DIRECTORY)/less
+LESS_FILES					=
+
+##### TODO: sass option
+
+##### Output directories for css files
+CSS_DIR						= $(PROD_DIRECTORY)/css
+CSS_FILES					= $(patsubst $(LESS_DIR)/%.less, $(CSS_DIR)/%.css, $(LESS_FILES))
+
+##### If you're on prod, you can minify into only one file. Put a name
+CSS_MINIFY_OUTPUT			= styles.css
+
+##### JS CONFIGURATION
+##### JS dev location
+JS_DIR						= $(DEV_DIRECTORY)/js
+JS_FILES					=
+##### JS output location
+JS_OUTPUT_DIR				= $(PROD_DIRECTORY)/js
+JS_OUTPUT_FILE				= $(JS_OUTPUT_DIR)/styles.js
+
+##### Location of yuicompressor jar to minify js files
+YUICOMPRESSOR_LOC			= $(HOME)/.lib/yuicompressor-2.4.8.jar
+
+##### DIRECTORIES AND FILES TO COPY FROM DEV LOCATION TO WWW LOCATION
+##### By default, it copies img directory and index.html
+DEV_DIRECTORY_LIST			= $(DEV_DIRECTORY)/img \
+							  $(DEV_DIRECTORY)/index.html
+##### Don't change this variable if you you want to keep the same directory structure into the prod directory
+PROD_DIRECTORY_LIST			= $(patsubst $(DEV_DIRECTORY)/%, $(PROD_DIRECTORY)/%, $(DEV_DIRECTORY_LIST))
+################################################################################
+
+################################################################################
+############################## Variables #######################################
+##### You don't need to change it.
+JS_EXEC						= java -jar $(YUICOMPRESSOR_LOC)
+
+ifeq ($(DEBUG),True)
+	    LESSC=lessc
+	else
+	    LESSC=lessc --clean-css
+	endif
+################################################################################
+
+################################################################################
+################# Variables for binary/executables #############################
+# TODO: Define variables for binary and executables to check if they exist. Use
+# $(shell command -v COMMAND_NAME) and ifndef
+################################################################################
+
+################################################################################
+###################################### Rules ###################################
+.PHONY: clean js css clean_js clean_jss_minify clean_css re_css re_js re prod re_prod init android init_dir init_dep
+
+all: init_dir css js $(PROD_DIRECTORY_LIST)
+
+##### MINIFY JS
+js:
+	$(JS_EXEX) -out $(JS_OUTPUT_FILE) $(JS_FILES)
+
+##### MINIFY CSS
+css: clean_css_minify $(CSS_FILES)
+
+$(CSS_DIR)/%.css: $(LESS_DIR)/%.less
+ifeq ($(DEBUG),True)
+		$(LESSC) $< $@
+else
+	    $(LESSC) $< >> $(CSS_MINIFY_OUTPUT)
+endif
+
+$(PROD_DIRECTORY)/%: $(DEV_DIRECTORY)/%
+	cp -r $< $@
+
+##### Cordova rules
+build_android: all
+	cordova build android
+
+build_ios: all
+	cordova build ios
+
+add_android:
+	cordova platform add android
+
+add_ios:
+	cordova platform add ios
+
+rm_android:
+	cordova platform rm android
+
+rm_ios:
+	cordova platform rm ios
+
+##### clean
+clean: clean_js clean_css
+
+clean_js:
+	$(RM) $(JS_OUTPUT_FILE)
+
+clean_css_minify:
+ifeq ($(DEBUG),False)
+	mkdir -p $(CSS_DIR)
+	$(RM) $(CSS_MINIFY_OUTPUT)
+	touch $(CSS_MINIFY_OUTPUT)
+endif
+
+clean_css:
+	$(RM) $(CSS_FILES)
+	$(RM) $(CSS_MINIFY_OUTPUT)
+
+##### re
+re_css: clean_css css
+
+re_js: clean_js js
+
+re: clean all
+
+##### special rules for prod
+prod:
+	make DEBUG=False css
+	make DEBUG=False js
+
+re_prod:
+	make DEBUG=False re_css
+	make DEBUG=False re_js
+
+##### Initialisation
+init_dir:
+	mkdir -p $(PROD_DIRECTORY) $(JS_OUTPUT_DIR) $(CSS_DIR)
+
+init_dep:
+	# TODO: Initialise the directory with required packages and executables
