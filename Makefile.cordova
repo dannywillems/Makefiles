@@ -47,6 +47,7 @@ PROD_DIRECTORY_LIST			= $(patsubst $(DEV_DIRECTORY)/%, $(PROD_DIRECTORY)/%, $(DE
 ##### BUILD DIRECTORY
 BUILD_DIRECTORY				= $(shell pwd)/build
 BUILD_NAME_TEMPLATE			= $(PROJECT_NAME)-$(VERSION)-$(shell date +%Y%m%d.%H%M%S)
+BUILD_RELEASE_NAME_TEMPLATE = $(PROJECT_NAME)-$(VERSION)
 ################################################################################
 
 ################################################################################
@@ -75,7 +76,7 @@ all: init_dir css js $(PROD_DIRECTORY_LIST)
 
 ##### MINIFY JS
 js:
-	$(JS_EXEX) -out $(JS_OUTPUT_FILE) $(JS_FILES)
+	$(JS_EXEC) -o $(JS_OUTPUT_FILE) $(JS_FILES)
 
 ##### MINIFY CSS
 css: clean_css_minify $(CSS_FILES)
@@ -92,8 +93,13 @@ $(PROD_DIRECTORY)/%: $(DEV_DIRECTORY)/%
 
 ##### Cordova rules
 build_android: all
+ifeq ($(DEBUG),False)
+	cordova build android --release
+	cp platforms/android/build/outputs/apk/android-release-unsigned.apk $(BUILD_DIRECTORY)/android/$(BUILD_RELEASE_NAME_TEMPLATE).apk
+else
 	cordova build android
 	cp platforms/android/build/outputs/apk/android-debug.apk $(BUILD_DIRECTORY)/android/$(BUILD_NAME_TEMPLATE).apk
+endif
 
 build_ios: all
 	cordova build ios
@@ -112,20 +118,17 @@ rm_ios:
 
 ##### clean
 clean: clean_js clean_css
+	$(RM) -r $(PROD_DIRECTORY_LIST)
+	cordova clean
 
 clean_js:
 	$(RM) $(JS_OUTPUT_FILE)
 
 clean_css_minify:
-ifeq ($(DEBUG),False)
-	mkdir -p $(CSS_DIR)
 	$(RM) $(CSS_MINIFY_OUTPUT)
-	touch $(CSS_MINIFY_OUTPUT)
-endif
 
 clean_css:
 	$(RM) $(CSS_FILES)
-	$(RM) $(CSS_MINIFY_OUTPUT)
 
 ##### re
 re_css: clean_css css
