@@ -46,6 +46,7 @@ PROD_DIRECTORY_LIST			= $(patsubst $(DEV_DIRECTORY)/%, $(PROD_DIRECTORY)/%, $(DE
 
 ##### BUILD DIRECTORY
 BUILD_DIRECTORY				= $(shell pwd)/build
+BUILD_NAME_TEMPLATE			= $(PROJECT_NAME)-$(VERSION)-$(shell date +%Y%m%d.%H%M%S)
 ################################################################################
 
 ################################################################################
@@ -92,7 +93,7 @@ $(PROD_DIRECTORY)/%: $(DEV_DIRECTORY)/%
 ##### Cordova rules
 build_android: all
 	cordova build android
-	cp platforms/android/build/outputs/apk/android-debug.apk $(BUILD_DIRECTORY)/android/$(PROJECT_NAME)-$(VERSION)-$(shell date +%Y%m%d.%H%M%S).apk
+	cp platforms/android/build/outputs/apk/android-debug.apk $(BUILD_DIRECTORY)/android/$(BUILD_NAME_TEMPLATE).apk
 
 build_ios: all
 	cordova build ios
