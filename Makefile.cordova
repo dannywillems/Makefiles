@@ -3,6 +3,12 @@
 ##### Set DEBUG to True if you don't want to minify css files (just compile).
 ##### Set to false if you're in dev.
 DEBUG						= True
+
+##### PROJECT VARIABLES
+PROJECT_NAME				= HelloWorld
+VERSION						= 1.0.0
+
+#####
 DEV_DIRECTORY				= app
 PROD_DIRECTORY				= www
 
@@ -37,6 +43,9 @@ DEV_DIRECTORY_LIST			= $(DEV_DIRECTORY)/img \
 							  $(DEV_DIRECTORY)/index.html
 ##### Don't change this variable if you you want to keep the same directory structure into the prod directory
 PROD_DIRECTORY_LIST			= $(patsubst $(DEV_DIRECTORY)/%, $(PROD_DIRECTORY)/%, $(DEV_DIRECTORY_LIST))
+
+##### BUILD DIRECTORY
+BUILD_DIRECTORY				= $(shell pwd)/build
 ################################################################################
 
 ################################################################################
@@ -83,6 +92,7 @@ $(PROD_DIRECTORY)/%: $(DEV_DIRECTORY)/%
 ##### Cordova rules
 build_android: all
 	cordova build android
+	cp platforms/android/build/outputs/apk/android-debug.apk $(BUILD_DIRECTORY)/android/$(PROJECT_NAME)-$(VERSION)-$(shell date +%Y%m%d.%H%M%S).apk
 
 build_ios: all
 	cordova build ios
@@ -134,7 +144,7 @@ re_prod:
 
 ##### Initialisation
 init_dir:
-	mkdir -p $(PROD_DIRECTORY) $(JS_OUTPUT_DIR) $(CSS_DIR)
+	mkdir -p $(PROD_DIRECTORY) $(JS_OUTPUT_DIR) $(CSS_DIR) $(BUILD_DIRECTORY)/android $(BUILD_DIRECTORY)/ios
 
 init_dep:
 	# TODO: Initialise the directory with required packages and executables
