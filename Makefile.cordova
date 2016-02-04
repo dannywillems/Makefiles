@@ -94,40 +94,62 @@ $(PROD_DIRECTORY)/%: $(DEV_DIRECTORY)/%
 ##### Cordova rules
 build_android: all
 ifeq ($(DEBUG),False)
-	cordova build android --release
-	cp platforms/android/build/outputs/apk/android-release-unsigned.apk $(BUILD_DIRECTORY)/android/$(BUILD_RELEASE_NAME_TEMPLATE).apk
+	@echo "-----> Build Android: release version"
+	@cordova build android --release
+	@echo "-----> Copy the apk into $(BUILD_DIRECTORY)/android"
+	@cp platforms/android/build/outputs/apk/android-release-unsigned.apk $(BUILD_DIRECTORY)/android/$(BUILD_RELEASE_NAME_TEMPLATE).apk
 else
-	cordova build android
+	@echo "-----> Build Android: debug version"
+	@cordova build android
+	@echo "-----> Copy the apk into $(BUILD_DIRECTORY)/android"
 	cp platforms/android/build/outputs/apk/android-debug.apk $(BUILD_DIRECTORY)/android/$(BUILD_NAME_TEMPLATE).apk
 endif
 
+install_android: build_android
+ifeq ($(DEBUG),False)
+	@echo "-----> Install release version on Android device. Be sure adb server is launched!"
+	@adb install -r platforms/android/build/outputs/apk/android-release-unsigned.apk
+else
+	@echo "-----> Install debug version on Android device. Be sure adb server is launched!"
+	@adb install -r platforms/android/build/outputs/apk/android-debug.apk
+endif
+
 build_ios: all
-	cordova build ios
+	@cordova build ios
 
 add_android:
-	cordova platform add android
+	@echo "-----> Add android platform. Be sure you installed the Android SDK!"
+	@cordova platform add android
 
 add_ios:
-	cordova platform add ios
+	@echo "-----> Add iOS platform. Be sure you installed the iOS SDK!"
+	@cordova platform add ios
 
 rm_android:
-	cordova platform rm android
+	@echo "-----> Remove Android platform."
+	@cordova platform rm android
 
 rm_ios:
-	cordova platform rm ios
+	@echo "-----> Remove iOS platform."
+	@cordova platform rm ios
 
 ##### clean
-clean: clean_js clean_css
+clean: clean_js clean_css clean_css_minify
+	@echo "-----> Remove production directory list"
 	$(RM) -r $(PROD_DIRECTORY_LIST)
-	cordova clean
+	@echo "-----> Clean cordova"
+	@cordova clean
 
 clean_js:
+	@echo "-----> Remove JS compiled file"
 	$(RM) $(JS_OUTPUT_FILE)
 
 clean_css_minify:
+	@echo "-----> Remove CSS minified file"
 	$(RM) $(CSS_MINIFY_OUTPUT)
 
 clean_css:
+	@echo "-----> Remove CSS files"
 	$(RM) $(CSS_FILES)
 
 ##### re
