@@ -48,6 +48,9 @@ PROD_DIRECTORY_LIST			= $(patsubst $(DEV_DIRECTORY)/%, $(PROD_DIRECTORY)/%, $(DE
 BUILD_DIRECTORY				= $(shell pwd)/build
 BUILD_NAME_TEMPLATE			= $(PROJECT_NAME)-$(VERSION)-$(shell date +%Y%m%d.%H%M%S)
 BUILD_RELEASE_NAME_TEMPLATE = $(PROJECT_NAME)-$(VERSION)
+
+##### PLUGINS
+PLUGINS						= cordova-plugin-whitelist
 ################################################################################
 
 ################################################################################
@@ -171,6 +174,11 @@ re_prod:
 ##### Initialisation
 init_dir:
 	mkdir -p $(PROD_DIRECTORY) $(JS_OUTPUT_DIR) $(CSS_DIR) $(BUILD_DIRECTORY)/android $(BUILD_DIRECTORY)/ios
+
+init_plugins: $(PLUGINS)
+
+$(PLUGINS):
+	cordova plugin add $@
 
 init_dep:
 	# TODO: Initialise the directory with required packages and executables
