@@ -117,6 +117,10 @@ else
 	@adb install -r platforms/android/build/outputs/apk/android-debug.apk
 endif
 
+run_android: all
+	@echo "-----> Run the application on the connected device"
+	@cordova run android
+
 build_ios: all
 	@cordova build ios
 
