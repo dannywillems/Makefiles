@@ -17,3 +17,4 @@ Feel free to add your own Makefile and make a pull request.
   *app* directory (default: app) and when you launch *make*, it minifies your js
   files, compile your less files into css files (sass coming soon). A complete
   article and tutorial will be available on http://blog.danny-willems.be.
+- **Makefile.cordova.js_of_ocaml**: Use [js_of_ocaml](http://ocsigen.org/js_of_ocaml/) in your cordova application. It compiles your ocaml files into a js file. It's very similar to Makefile.cordova.
