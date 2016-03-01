@@ -51,7 +51,7 @@ ML_FILES 					=	$(wildcard $(ML_DIRECTORY)/*.ml)
 TMP_OUT_BYTECODE			=	$(ML_DIRECTORY)/out.byte
 BASIC_PACKAGE				=	-package js_of_ocaml -package js_of_ocaml.syntax
 BASIC_SYNTAX				=	-syntax camlp4o
-CC_BYTECODE					=	ocamlfind ocamlc $(BASIC_PACKAGE) $(CUSTOM_PACKAGE) \
+CC_BYTECODE					=	ocamlfind ocamlc -I $(ML_DIRECTORY) $(BASIC_PACKAGE) $(CUSTOM_PACKAGE) \
 								$(BASIC_SYNTAX) $(CUSTOM_SYNTAX) -linkpkg \
 							 	-o $(TMP_OUT_BYTECODE)
 CC_JS						=	js_of_ocaml -o $(ML_JS_DIRECTORY)/$(ML_JS_OUTPUT_FILE)
@@ -143,13 +143,13 @@ rm_ios:
 	@cordova platform rm ios
 
 ##### clean
-clean: clean_js clean_css clean_css_minify
+clean: clean_js_of_ocaml clean_css clean_css_minify
 	@echo "-----> Remove production directory list"
 	$(RM) -r $(PROD_DIRECTORY_LIST)
 	@echo "-----> Clean cordova"
 	@cordova clean
 
-clean_js:
+clean_js_of_ocaml:
 	@echo "-----> Remove ml compiled file"
 	$(RM) $(TMP_OUT_BYTECODE) $(CMO_FILES) $(CMI_FILES)
 	$(RM) $(ML_JS_DIRECTORY)/$(ML_JS_OUTPUT_FILE)
