@@ -1,5 +1,12 @@
 ################################################################################
 ########################### Variables to change ################################
+
+##### Choose the syntax extension you want between camlp4 (deprecated since
+##### js_of_ocaml >= 2.7) and ppx (available for js_of_ocaml >= 2.7)
+##### Default is ppx if SYNTAX_EXTENSION is set to different values than ppx or
+##### camlp4
+SYNTAX_EXTENSION	= camlp4
+
 ##### Directory where ml files are
 ML_DIR				=	ml
 ##### ml files to compile into js. All files will be compiled at the same time.
@@ -25,8 +32,14 @@ CUSTOM_SYNTAX		=
 ############################### Variables ######################################
 ##### You don't need to change it.
 TMP_OUT_BYTECODE	=	out.byte
-BASIC_PACKAGE		=	-package js_of_ocaml -package js_of_ocaml.syntax
-BASIC_SYNTAX		=	-syntax camlp4o
+
+ifeq ($(SYNTAX_EXTENSION),camlp4)
+	BASIC_PACKAGE 	=	-package js_of_ocaml -package js_of_ocaml.syntax
+	BASIC_SYNTAX 	=	-syntax camlp4o
+else
+	BASIC_PACKAGE 	=	-package js_of_ocaml -package js_of_ocaml.ppx
+endif
+
 CC_BYTECODE			=	ocamlfind ocamlc $(BASIC_PACKAGE) $(CUSTOM_PACKAGE) \
 						$(BASIC_SYNTAX) $(CUSTOM_SYNTAX) -linkpkg \
 					 	-o $(TMP_OUT_BYTECODE)
