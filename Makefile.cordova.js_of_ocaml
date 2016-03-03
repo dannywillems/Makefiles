@@ -1,5 +1,12 @@
 ################################################################################
 ############################## Variables to change #############################
+
+##### Choose the syntax extension you want between camlp4 (deprecated since
+##### js_of_ocaml >= 2.7) and ppx (available for js_of_ocaml >= 2.7)
+##### Default is ppx if SYNTAX_EXTENSION is set to different values than ppx or
+##### camlp4
+SYNTAX_EXTENSION			= camlp4
+
 ##### Set DEBUG to True if you don't want to minify css files (just compile).
 ##### Set to false if you're in dev.
 DEBUG						= True
@@ -49,8 +56,14 @@ PLUGINS						= cordova-plugin-whitelist
 ##### You don't need to change it.
 ML_FILES 					=	$(wildcard $(ML_DIRECTORY)/*.ml)
 TMP_OUT_BYTECODE			=	$(ML_DIRECTORY)/out.byte
-BASIC_PACKAGE				=	-package js_of_ocaml -package js_of_ocaml.syntax
-BASIC_SYNTAX				=	-syntax camlp4o
+
+ifeq ($(SYNTAX_EXTENSION),camlp4)
+	BASIC_PACKAGE 	=	-package js_of_ocaml -package js_of_ocaml.syntax
+	BASIC_SYNTAX 	=	-syntax camlp4o
+else
+	BASIC_PACKAGE 	=	-package js_of_ocaml -package js_of_ocaml.ppx
+endif
+
 CC_BYTECODE					=	ocamlfind ocamlc -I $(ML_DIRECTORY) $(BASIC_PACKAGE) $(CUSTOM_PACKAGE) \
 								$(BASIC_SYNTAX) $(CUSTOM_SYNTAX) -linkpkg \
 							 	-o $(TMP_OUT_BYTECODE)
