@@ -15,7 +15,7 @@ CC			= $(PDFLATEX)
 ##### Build name file
 SRC			= $(NAME).tex
 
-##### Compilators
+##### Compilers
 PDFLATEX	= pdflatex
 DVILUATEX	= dviluatex
 ################################################################################
