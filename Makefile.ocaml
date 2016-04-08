@@ -16,7 +16,7 @@ GRAPHICS	= graphics.cma -cclib -lGraphics
 ################################################################################
 ############################ Constant variables ################################
 
-##### Compilators
+##### Compilers
 CAMLC		= ocaml
 CAMLOPT		= ocamlopt
 CAMLDEP		= ocamldep
