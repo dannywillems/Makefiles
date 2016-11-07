@@ -6,12 +6,19 @@ SRC_DIR		=
 ##### file to compile, without tex extension;
 NAME		=
 
+##### Output directory
+# If not modified, it is the directory which hold the MakeFile
+OUTPUT_DIR = .
+
 ##### Executable/output to use: PDFLATEX, DVILUATEX
 CC			= $(PDFLATEX)
 ################################################################################
 
 ################################################################################
 ############################# Constant variables ###############################
+##### Shell
+SHELL=/bin/bash
+
 ##### Build name file
 SRC			= $(NAME).tex
 
@@ -23,16 +30,18 @@ DVILUATEX	= dviluatex
 ################################################################################
 ############################### Rules ##########################################
 $(NAME):
-	cd $(SRC_DIR) && $(CC) -output-directory ../ $(SRC)
-	cd $(SRC_DIR) && $(CC) -output-directory ../ $(SRC)
+	mkdir -p $(OUTPUT_DIR)
+	cd $(SRC_DIR) && $(CC) -output-directory ../$(OUTPUT_DIR) $(SRC)
+	cd $(SRC_DIR) && $(CC) -output-directory ../$(OUTPUT_DIR) $(SRC)
 
 zip: fclean $(NAME)
 	$(MAKE) clean
-	zip -r $(NAME).zip . -x *.git*
+	zip -r $(NAME).zip $(OUTPUT_DIR)/* -x *.git*
 
 clean:
-	$(RM) -f $(NAME).out $(NAME).aux $(NAME).toc $(NAME).log $(NAME).tex.backup $(NAME).nav $(NAME).snm
+	$(RM) -f $(OUTPUT_DIR)/$(NAME).{out,aux,toc,log,tex.backup,nav,snm}
 
 fclean: clean
-	$(RM) -f $(NAME).pdf $(NAME).zip $(NAME).dvi
+	$(RM) -f $(OUTPUT_DIR)/$(NAME).{pdf,zip,dvi}
+	rmdir $(OUTPUT_DIR)
 ################################################################################
