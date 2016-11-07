@@ -7,7 +7,7 @@ SRC_DIR		=
 NAME		=
 
 ##### Output directory
-# If not modified, it is the directory which hold the MakeFile
+# If not modified, it is the directory which holds the MakeFile
 OUTPUT_DIR = .
 
 ##### Executable/output to use: PDFLATEX, DVILUATEX
