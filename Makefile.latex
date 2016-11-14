@@ -13,6 +13,7 @@ OUTPUT_DIR	=
 ##### Executable/output to use: PDFLATEX, DVILUATEX
 CC			= $(PDFLATEX)
 CC_BIB		= $(BIBTEX)
+USE_BIB		= false
 ################################################################################
 
 ################################################################################
@@ -36,12 +37,15 @@ $(OUTPUT_DIR):
 $(NAME): $(OUTPUT_DIR)
 	TEXINPUTS="$(SRC_DIR):" $(CC) -output-directory $(OUTPUT_DIR) \
                                  $(SRC_DIR)/$(NAME)
+ifeq ($(USE_BIB),true)
 	BIBINPUTS="$(SRC_DIR):" \
     BSTINPUT="$(SRC_DIR):" \
     TEXMFOUTPUTS="$(OUTPUT_DIR):" \
     $(CC_BIB) $(OUTPUT_DIR)/$(NAME)
 	TEXINPUTS="$(SRC_DIR):" $(CC) -output-directory $(OUTPUT_DIR) \
                                  $(SRC_DIR)/$(NAME)
+else
+endif
 	TEXINPUTS="$(SRC_DIR):" $(CC) -output-directory $(OUTPUT_DIR) \
                                  $(SRC_DIR)/$(NAME)
 
