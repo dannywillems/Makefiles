@@ -1,20 +1,4 @@
-################################################################################
-############################ Variables to change ###############################
-##### Sources directory
-SRC_DIR		=
-
-##### Main file, without .tex extension.
-NAME		=
-
-##### Output directory
-# If not modified, it is the directory which holds the MakeFile
-OUTPUT_DIR	=
-
-##### Executable/output to use: PDFLATEX, DVILUATEX
-CC			= $(PDFLATEX)
-CC_BIB		= $(BIBTEX)
-USE_BIB		= false
-################################################################################
+include Makefile.config
 
 ################################################################################
 ############################# Constant variables ###############################
