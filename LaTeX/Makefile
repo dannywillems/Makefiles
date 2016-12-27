@@ -5,6 +5,9 @@ include Makefile.config
 ##### Shell
 SHELL		= /bin/bash
 
+##### Current directory. it's the directory containing the makefile.
+CURRENT_DIR = $(shell pwd)
+
 ##### Compilers
 PDFLATEX	= pdflatex
 DVILUATEX	= dviluatex
@@ -29,12 +32,13 @@ $(NAME): $(OUTPUT_DIR)
     -output-directory=$(OUTPUT_DIR) \
     $(NAME).tex
 ifeq ($(USE_BIB),true)
-	sed 's/@input{/@input{$(OUTPUT_DIR)\//g' -i $(OUTPUT_DIR)/$(NAME).aux
-	BIBINPUTS="$(SRC_DIR)" \
-    BSTINPUT="$(SRC_DIR)" \
-    TEXMFOUTPUTS="$(OUTPUT_DIR)/" \
+	cd $(OUTPUT_DIR) && \
+    BIBINPUTS="$(CURRENT_DIR)/$(SRC_DIR)" \
+    BSTINPUT="$(CURRENT_DIR)/$(SRC_DIR)" \
+    TEXMFOUTPUTS="./" \
     $(CC_BIB) \
-    $(OUTPUT_DIR)/$(NAME)
+    $(NAME) && \
+    cd $(CURRENT_DIR)
 	TEXINPUTS="$(SRC_DIR):" \
     TEXMFOUTPUTS="$(OUTPUT_DIR)/" \
     $(CC) \
@@ -65,4 +69,4 @@ fclean: clean
 re: fclean $(NAME)
 ################################################################################
 
-.PHONY: all $(NAME) zip clean fclean re
+.PHONY: all $(NAME) zip clean fclean re $(BBL_FILES)
