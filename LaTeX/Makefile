@@ -27,7 +27,7 @@ $(OUTPUT_DIR):
 	mkdir -p $@
 
 $(NAME): $(OUTPUT_DIR)
-	TEXINPUTS="$(SRC_DIR):" \
+	TEXINPUTS="$(SRC_DIR):$(RES_DIR):" \
     TEXMFOUTPUTS="$(OUTPUT_DIR)" \
     $(CC) \
     -output-directory=$(OUTPUT_DIR) \
@@ -40,14 +40,14 @@ ifeq ($(USE_BIB),true)
     $(CC_BIB) \
     $(NAME) && \
     cd $(CURRENT_DIR)
-	TEXINPUTS="$(SRC_DIR):" \
+	TEXINPUTS="$(SRC_DIR):$(RES_DIR):" \
     TEXMFOUTPUTS="$(OUTPUT_DIR)/" \
     $(CC) \
     -output-directory=$(OUTPUT_DIR) \
     $(SRC_DIR)/$(NAME).tex
 else
 endif
-	TEXINPUTS="$(SRC_DIR):" \
+	TEXINPUTS="$(SRC_DIR):$(RES_DIR):" \
     TEXMFOUTPUTS="$(OUTPUT_DIR)/" \
     $(CC) \
     -output-directory=$(OUTPUT_DIR) \
