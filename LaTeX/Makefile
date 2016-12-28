@@ -15,6 +15,7 @@ BIBTEX		= bibtex
 
 ##### Intermediate files.
 AUX_FILES = $(addprefix $(OUTPUT_DIR)/, $(addsuffix .aux, $(INCLUDED_TEX_FILES)))
+BBL_FILES = $(addprefix $(OUTPUT_DIR)/, $(addsuffix .bbl, $(INCLUDED_TEX_FILES)))
 
 ################################################################################
 
@@ -58,7 +59,7 @@ zip: fclean $(NAME)
 
 clean:
 	$(RM) $(OUTPUT_DIR)/$(NAME).{out,aux,toc,log,tex.backup,nav,snm,bbl,blg}
-	$(RM) $(AUX_FILES)
+	$(RM) $(AUX_FILES) $(BBL_FILES)
 
 # $(OUTPUT_DIR) is only removed when the directory is empty (never be the case
 # if it's the project root directory).
@@ -69,4 +70,4 @@ fclean: clean
 re: fclean $(NAME)
 ################################################################################
 
-.PHONY: all $(NAME) zip clean fclean re $(BBL_FILES)
+.PHONY: all $(NAME) zip clean fclean re
