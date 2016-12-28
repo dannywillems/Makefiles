@@ -32,8 +32,8 @@ $(NAME): $(OUTPUT_DIR)
 	$(CC_WITH_OPTIONS) $@.tex
 ifeq ($(USE_BIB),true)
 	cd $(OUTPUT_DIR) && \
-    BIBINPUTS="$(CURRENT_DIR)/$(SRC_DIR)" \
-    BSTINPUT="$(CURRENT_DIR)/$(SRC_DIR)" \
+    BIBINPUTS="$(CURRENT_DIR)/$(BIB_DIR)" \
+    BSTINPUT="$(CURRENT_DIR)/$(BIB_DIR)" \
     TEXMFOUTPUTS="./" \
     $(CC_BIB) \
     $(NAME) && \
