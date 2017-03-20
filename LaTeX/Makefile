@@ -14,7 +14,7 @@ DVILUATEX	= dviluatex
 BIBTEX		= bibtex
 
 CC_WITH_OPTIONS = \
-    TEXINPUTS="$(SRC_DIR):$(RES_DIR):$(THEME_DIR):" \
+    TEXINPUTS="$(SRC_DIR):$(RES_DIR):$(THEME_DIR):$(LIB_DIR):" \
     TEXMFOUTPUTS="$(OUTPUT_DIR)" \
     $(CC) \
     -output-directory=$(OUTPUT_DIR)
